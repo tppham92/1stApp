@@ -21,12 +21,16 @@ class ViewController: UIViewController {
         storyPrompt.number = Int(sender.value)
     }
     @IBAction func changeStoryType(_ sender: UISegmentedControl) {
-        if let genre = StoryPrompts.Genre(rawValue: sender.selectSegmentIndex) {
-        storyPrompt.genre = genre
-    } else {
-    storyPrompt.genre = .scifi
+        if let genre = StoryPrompts.Genre(rawValue: sender.selectedSegmentIndex) {
+            storyPrompt.genre = genre
+        } else {
+            storyPrompt.genre = .scifi
+        }
     }
-}
+    @IBAction func generateStoryPrompt(_ sender: Any) {
+        updateStoryPrompt()
+        print(storyPrompt)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +40,19 @@ class ViewController: UIViewController {
         storyPrompt.adjective = "Smelly"
         storyPrompt.verb = "Burps"
         storyPrompt.number = Int(numberSlider.value)
-        print(storyPrompt)
+    }
+    
+    func updateStoryPrompt()  {
+        storyPrompt.noun = nounTextfield.text ?? ""
+        storyPrompt.adjective = adjTextfield.text ?? ""
+        storyPrompt.verb = verbTextfield.text ?? ""
     }
 }
 
+extension ViewController: UISearchTextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        updateStoryPrompt()
+        return true
+    }
+}
